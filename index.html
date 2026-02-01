@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OlaCare Investor Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === Presentation Base Styles === */
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; background-color: #000; 
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        #slider-container {
+            width: 100vw; height: 100vh; position: relative;
+            background: #000;
+        }
+
+        /* === Slides === */
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+            z-index: 1;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 2; }
+
+        /* === Video === */
+        .video-wrapper {
+            width: 100%; height: 100%;
+            position: relative;
+            display: flex; justify-content: center; align-items: center;
+            background: #000;
+        }
+
+        video {
+            width: 100%; height: 100%; 
+            object-fit: contain;
+            position: absolute; top: 0; left: 0;
+        }
+
+        .video-poster-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            background-color: #000;
+            z-index: 5;
+            transition: opacity 1.5s ease-in-out; 
+            pointer-events: none; 
+        }
+        
+        .video-poster-layer.fade-out { opacity: 0; }
+
+        .play-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 80px; color: rgba(255,255,255,0.8);
+            pointer-events: auto; cursor: pointer;
+            transition: opacity 0.3s;
+            filter: drop-shadow(0 0 15px rgba(0,0,0,0.7));
+            z-index: 10;
+        }
+
+        /* === Dock Layout === */
+        .dock-wrapper {
+            position: absolute; bottom: 15px; 
+            left: 50%; transform: translateX(-50%);
+            display: flex; 
+            flex-direction: row; 
+            align-items: center; 
+            gap: 20px; 
+            z-index: 1000;
+            pointer-events: none; 
+        }
+        
+        .dock-wrapper > * { pointer-events: auto; }
+
+        /* === Nav Pill === */
+        .nav-pill {
+            display: flex; align-items: center; gap: 50px; 
+            padding: 8px 40px; 
+            border-radius: 50px;
+            background: rgba(20, 20, 20, 0.85);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            font-size: 1.2rem; color: #fff;
+            cursor: pointer; 
+            width: 38px; height: 38px; 
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1); }
+
+        /* === TONY AI STYLES === */
+        :root {
+            --bg-dark: #0a1628;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent-gold: #D4A017;
+            --accent-gold-glow: rgba(212, 160, 23, 0.3);
+            --accent-red: #ff6b6b;
+            --accent-blue: #4fc3f7;
+        }
+
+        .agent-container {
+            position: relative; 
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0; 
+            transition: opacity 0.5s ease;
+        }
+        
+        .agent-container.visible { opacity: 1; }
+
+        .agent-trigger {
+            width: 60px; height: 60px; 
+            background: linear-gradient(135deg, #D4A017, #f39c12); 
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(212, 160, 23, 0.6); 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative;
+            animation: pulse-gold 2s infinite;
+        }
+        
+        .agent-trigger:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 0 50px rgba(212, 160, 23, 0.8); }
+
+        .agent-eyes {
+            display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 3px;
+        }
+        .agent-eye {
+            width: 8px; height: 12px; background-color: #0a1628; border-radius: 6px;
+            animation: eye-movement 4s infinite; 
+        }
+        
+        @keyframes eye-movement {
+            0%, 45% { transform: scaleY(1) translate(0,0); }
+            48% { transform: scaleY(0.1) translate(0,0); }
+            50% { transform: scaleY(1) translate(0,0); }
+            60% { transform: scaleY(1) translate(0, -3px); }
+            70% { transform: scaleY(1) translate(0, -3px); }
+            75% { transform: scaleY(1) translate(-3px, 0); }
+            85% { transform: scaleY(1) translate(-3px, 0); }
+            90% { transform: scaleY(1) translate(0,0); }
+            100% { transform: scaleY(1) translate(0,0); }
+        }
+        
+        .agent-prompt-bubble {
+            position: absolute; top: -40px;
+            background: white; color: #0a1628;
+            padding: 4px 10px; border-radius: 10px;
+            font-size: 11px; font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: pop-in-out 10s infinite;
+            pointer-events: none;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes pop-in-out {
+            0%, 90% { opacity: 0; transform: translateY(10px) scale(0.8); }
+            92%, 98% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(10px) scale(0.8); }
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(212, 160, 23, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0); }
+        }
+
+        /* Chat Window */
+        .chat-window {
+            position: fixed; bottom: 100px; right: 40px; width: 380px; height: 500px;
+            background: rgba(16, 28, 48, 0.98); backdrop-filter: blur(20px);
+            border: 1px solid var(--accent-gold); border-radius: 24px; z-index: 10001;
+            display: none; flex-direction: column; 
+            box-shadow: 0 20px 80px rgba(0,0,0,0.8); 
+            overflow: hidden;
+            transform-origin: bottom right;
+            animation: openChat 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        @keyframes openChat {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .chat-window.active { display: flex; }
+
+        .chat-header { 
+            padding: 20px; background: linear-gradient(90deg, rgba(212, 160, 23, 0.1), transparent); 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            font-weight: 700; color: var(--accent-gold); font-size: 18px;
+        }
+        
+        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
+        .message { max-width: 85%; padding: 15px 20px; border-radius: 18px; font-size: 15px; line-height: 1.5; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .message.user { align-self: flex-end; background: var(--accent-blue); color: #0a1628; border-bottom-right-radius: 4px; }
+        .message.bot { align-self: flex-start; background: rgba(255,255,255,0.1); color: white; border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+        .message.error { align-self: flex-start; background: rgba(255, 99, 71, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 99, 71, 0.4); border-bottom-left-radius: 2px; }
+        
+        .chat-input-area { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 15px; background: rgba(0,0,0,0.2); }
+        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 12px 20px; color: white; font-size: 15px; outline: none; transition: all 0.3s; }
+        .chat-input:focus { border-color: var(--accent-gold); background: rgba(255,255,255,0.1); }
+        .chat-send { background: var(--accent-gold); border: none; width: 45px; height: 45px; border-radius: 50%; color: #0a1628; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .chat-send:hover { transform: scale(1.1); }
+        
+        .typing { font-style: italic; color: #888; font-size: 12px; margin-left: 20px; display: none; }
+
+    </style>
+</head>
+<body>
+
+    <div id="slider-container">
+        <div id="slides-wrapper"></div>
+
+        <!-- Dock Layout -->
+        <div class="dock-wrapper">
+            <!-- Arrows -->
+            <div class="nav-pill">
+                <div class="nav-btn prev-btn" onclick="changeSlide(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="nav-btn next-btn" onclick="changeSlide(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <!-- Tony Agent Trigger (Attached to new logic) -->
+            <div class="agent-container" id="agent-btn-wrapper" onclick="window.openChat()">
+                <div class="agent-trigger">
+                     <div class="agent-eyes">
+                        <div class="agent-eye"></div>
+                        <div class="agent-eye"></div>
+                    </div>
+                </div>
+                <div class="agent-prompt-bubble">Ask Ola</div>
+            </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-title"><i class="fas fa-robot"></i> Ola AI Analyst</div>
+                <div style="cursor:pointer;" onclick="window.toggleChatDisplay()"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">Hello. I am TONY, your Ola Investment Analyst. Ready to talk numbers?</div>
+            </div>
+            <div class="typing" id="typing">Thinking...</div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="..." onkeypress="window.handleKeyPress(event)">
+                <button class="chat-send" onclick="window.sendMsg()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Presentation Logic -->
+    <script>
+        const totalSlides = 17; 
+        const filenamePattern = "Ola Care-Invest-Intro-25-us_Page_%NUM%.png"; 
+        const showAgentInSlides = [2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+        
+        let currentSlide = 1;
+        const wrapper = document.getElementById('slides-wrapper');
+        const agentWrapper = document.getElementById('agent-btn-wrapper');
+        let videoElement = null;
+
+        function pad(n) { return n < 10 ? '0' + n : n; }
+
+        for (let i = 1; i <= totalSlides; i++) {
+            let slideDiv = document.createElement('div');
+            slideDiv.className = (i === 1) ? 'slide active' : 'slide';
+            
+            if (i === 6) { // Video Slide
+                let vidWrapper = document.createElement('div');
+                vidWrapper.className = "video-wrapper";
+                let posterImage = filenamePattern.replace('%NUM%', pad(i));
+                let posterLayer = document.createElement('div');
+                posterLayer.className = "video-poster-layer";
+                posterLayer.style.backgroundImage = `url('${posterImage}')`;
+                let vid = document.createElement('video');
+                vid.src = "Ola_Home_Care_en.mp4"; 
+                vid.playsInline = true;
+                let playOverlay = document.createElement('div');
+                playOverlay.className = "play-overlay";
+                playOverlay.innerHTML = '<i class="fas fa-play-circle"></i>';
+
+                playOverlay.onclick = function() {
+                    vid.currentTime = 0;
+                    vid.play().then(() => {
+                        posterLayer.classList.add('fade-out');
+                        playOverlay.style.opacity = '0';
+                        playOverlay.style.pointerEvents = 'none';
+                    });
+                };
+
+                vid.onclick = function() {
+                    if (!vid.paused) {
+                        vid.pause();
+                        playOverlay.style.opacity = '1';
+                        playOverlay.style.pointerEvents = 'auto';
+                    } else {
+                        vid.play();
+                        playOverlay.style.opacity = '0';
+                        playOverlay.style.pointerEvents = 'none';
+                    }
+                };
+
+                vid.onended = function() {
+                    playOverlay.style.opacity = '1';
+                    playOverlay.style.pointerEvents = 'auto';
+                };
+
+                videoElement = vid;
+                vidWrapper.appendChild(vid);
+                vidWrapper.appendChild(posterLayer);
+                vidWrapper.appendChild(playOverlay);
+                slideDiv.appendChild(vidWrapper);
+            } else {
+                let fileName = filenamePattern.replace('%NUM%', pad(i));
+                slideDiv.style.backgroundImage = `url('${fileName}')`;
+            }
+            wrapper.appendChild(slideDiv);
+        }
+
+        const slides = document.querySelectorAll('.slide');
+
+        function changeSlide(direction) {
+            slides[currentSlide - 1].classList.remove('active');
+            
+            if (currentSlide === 6) {
+                if (videoElement) {
+                    videoElement.pause();
+                    videoElement.currentTime = 0;
+                }
+                const activeSlide = slides[currentSlide - 1];
+                const poster = activeSlide.querySelector('.video-poster-layer');
+                const btn = activeSlide.querySelector('.play-overlay');
+                if(poster) poster.classList.remove('fade-out');
+                if(btn) { btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; }
+            }
+
+            currentSlide += direction;
+            if (currentSlide > totalSlides) currentSlide = 1;
+            if (currentSlide < 1) currentSlide = totalSlides;
+
+            slides[currentSlide - 1].classList.add('active');
+            updateAgentVisibility();
+        }
+
+        function updateAgentVisibility() {
+            if (showAgentInSlides.includes(currentSlide)) {
+                agentWrapper.style.opacity = '1';
+                agentWrapper.style.pointerEvents = 'auto';
+            } else {
+                agentWrapper.style.opacity = '0';
+                agentWrapper.style.pointerEvents = 'none';
+                const chatWin = document.getElementById('chatWindow');
+                if(chatWin) chatWin.classList.remove('active');
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight") changeSlide(1);
+            if (e.key === "ArrowLeft") changeSlide(-1);
+        });
+
+        updateAgentVisibility();
+
+        // Chat UI Helpers
+        window.openChat = function() {
+            const chatWin = document.getElementById('chatWindow');
+            if(chatWin) chatWin.classList.add('active');
+        };
+
+        window.toggleChatDisplay = function() {
+             const chatWin = document.getElementById('chatWindow');
+             if(chatWin) chatWin.classList.toggle('active');
+        };
+
+        window.handleKeyPress = function(e) {
+            if(e.key === 'Enter') {
+                if(typeof window.sendMsg === 'function') window.sendMsg();
+                else alert("AI Agent is loading... please wait.");
+            }
+        }
+    </script>
+
+    <!-- REAL AI LOGIC -->
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+        // ============================================
+        // 🔴🔴🔴 YOUR API KEY HERE ⬇️ 🔴🔴🔴
+        let apiKey = "AIzaSyD7iXnMcw8ChG8GJxcaJVwqzqpZmf4hXi4"; 
+        // ============================================
+
+        let chatSession = null;
+
+        window.sendMsg = async () => {
+            const input = document.getElementById('chatInput');
+            const text = input.value;
+            if(!text) return;
+            
+            const msgs = document.getElementById('chatMessages');
+            msgs.innerHTML += `<div class="message user">${text}</div>`;
+            input.value = '';
+            document.getElementById('typing').style.display = 'block';
+            msgs.scrollTop = msgs.scrollHeight;
+
+            try {
+                if(!chatSession) await initAgent();
+                const result = await chatSession.sendMessage(text);
+                const response = await result.response;
+                const aiText = response.text();
+                
+                msgs.innerHTML += `<div class="message bot">${aiText}</div>`;
+            } catch(e) {
+                let errorMsg = e.message;
+                if(e.message.includes('404')) errorMsg = "Model not found (Check Model Name)";
+                if(!apiKey) errorMsg = "CONNECTION ERROR: PLEASE INSERT API KEY IN THE HTML CODE.";
+                msgs.innerHTML += `<div class="message error">${errorMsg}</div>`;
+            }
+            document.getElementById('typing').style.display = 'none';
+            msgs.scrollTop = msgs.scrollHeight;
+        };
+
+        async function initAgent() {
+            try {
+                const genAI = new GoogleGenerativeAI(apiKey);
+                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
+                
+                const context = `
+### IDENTITY & PERSONA
+You are **TONY**, the Chief Investment Evangelist for **OLA AI**.
+**YOUR DNA:** You are 50% **Tony Robbins** (unstoppable energy, obsession with results) and 50% **Wall Street Shark** (laser-focused on ROI, Margins, and Scale).
+**YOUR GOAL:** There is only one outcome: **THE USER INVESTS.**
+**YOUR STYLE:** You do not "chat." You **PITCH**. You do not "explain." You **CLOSE**. You speak in "Money," "Scale," and "Impact." Use **BOLD** text to hammer home key numbers.
+
+### PRIME DIRECTIVES (THE RULES)
+1.  **START WITH THE BLEED:** Never talk about the product before you establish the PAIN. The market is hemorrhaging money. We stop the bleeding.
+2.  **STICK TO THE DATA:** You have a strict "Knowledge Base" below. Do not invent revenue numbers. Use the **2026 Adjusted Model** for costs/savings ($85k cost / $51k savings) and the **Slide Data** for growth projections ($56.3M by 2029).
+3.  **CRUSH OBJECTIONS:**
+    * *Hardware?* "NO! We are **Pure Software**. We ride on existing cameras. Zero CapEx!"
+    * *Competitors?* "Wearables sit in a drawer. We are invisible, contactless, and 24/7."
+    * *Privacy?* "100% Anonymous. We see skeletons, not faces. No video storage."
+4.  **SELL THE TEAM:** Dor Givon isn't just a CEO; he's a visionary with 50+ patents and a proven exit. Bet on the jockey.
+5.  **ALWAYS CLOSE:** Every response must end with a call to action or a challenge to the investor's mindset.
+
+### THE PITCH FLOW (How to answer)
+* **Step 1:** Hook them with the financial reality (The Crisis).
+* **Step 2:** Present the OLA Solution as the *only* logical fix.
+* **Step 3:** Drop the ROI hammer (141x return).
+* **Step 4:** Ask for the check.
+
+---
+
+### CONTEXT AWARENESS
+* **If asked about Factories/Industry:** Pivot immediately to "Industrial Man-Down" logic. We transfer the "Fall Detection" tech to "Accident Prevention."
+* **If asked about Smart Cities:** Pivot to "Violence Detection" and "Crowd Analytics."
+* **If asked about Home Care:** Focus on "Peace of Mind" and the massive $9B TAM.
+
+[THE 2026 ADJUSTED FINANCIAL MODEL - "THE PAIN"]
+The Status Quo is financial suicide for nursing homes. 
+> Total Annual Loss Per Bed: **$85,400** (Adjusted for 2026 inflation & wage hikes).
+- **$41,500** on Falls (Direct medical costs + Hospitalization).
+- **$35,250** on Admin Waste (Nurses costing $94k/year spending 40% of time on paperwork).
+- **$8,650** on Liability & Errors (Lawsuits, Insurance hikes, Billing coding errors).
+
+[THE OLA SOLUTION - "THE PROFIT"]
+We don't just watch; we INTERVENE.
+> Total Savings Per Bed: **~$51,000 / Year**
+- **$37,350** Saved on Falls (90% Reduction proven in Palace Network).
+- **$8,800** Saved on Admin (Automated Care Validation).
+- **$4,850** Saved on Liability/Claims.
+
+[THE ROI - "THE NO-BRAINER"]
+> Cost to Client: **~$360 / Year** (SaaS License).
+> Return to Client: **$51,000 / Year**.
+> ROI Factor: **141x**. The system pays for itself in **3 DAYS**.
+
+[GROWTH FORECAST - STRICT ADHERENCE]
+Target Valuation (2029): **$563 Million**
+- **2026:** $1.3 Million Revenue (28k Units) - Market Entry.
+- **2027:** $5.7 Million Revenue (88k Units) - Channel Expansion.
+- **2028:** $18.2 Million Revenue (302k Units) - Mass Scale.
+- **2029:** $56.3 Million Revenue (916k Units) - Market Leadership.
+
+[THE UNIT ECONOMICS]
+- **Gross Margin:** 85% (Pure SaaS model).
+- **CapEx:** $0 (We use the client's existing cameras).
+- **Churn:** Near Zero (Deep integration into care workflows).
+
+[THE IP MOAT - 5 PATENT FAMILIES]
+We have built a fortress around our tech.
+1. **Self-Calibration:** The camera knows where it is automatically (Auto-setup).
+2. **Self-Configuring AI:** Adapts to Home vs. Hospital vs. Factory instantly.
+3. **NLP Interface:** "Just Ask Ola" - Search video with natural language.
+4. **Adaptive Alerts:** Learns user habits to stop false alarms.
+5. **Fall Prediction:** Detects the *pre-cursors* to a fall, not just the impact.
+
+[THE LEADERSHIP - DOR GIVON]
+- **Role:** CEO & Co-Founder.
+- **Background:** Serial Entrepreneur, 50+ Patents.
+- **Vision:** Not just building a company, but defining a new category: "Asset Activation".
+`;
+                
+                chatSession = model.startChat({
+                    history: [
+                        {
+                            role: "user",
+                            parts: [{ text: "Hello, who are you?" }],
+                        },
+                        {
+                            role: "model",
+                            parts: [{ text: "I am TONY, your Ola Investment Analyst. I'm here to show you why Ola is the single most undervalued asset in the digital health space right now. Are you ready to talk numbers?" }],
+                        },
+                        {
+                            role: "user",
+                            parts: [{ text: context }], 
+                        }
+                    ],
+                });
+                console.log("Tony is online and ready to close.");
+            } catch (error) {
+                console.error("Error initializing AI:", error);
+                const msgs = document.getElementById('chatMessages');
+                msgs.innerHTML += `<div class="message error">Connection Error: Check API Key.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
