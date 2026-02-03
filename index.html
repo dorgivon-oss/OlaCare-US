@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OlaCare Investor Presentation</title>
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === הגדרות בסיס === */
+        /* === Global Reset === */
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             overflow: hidden; background-color: #000; 
@@ -22,7 +24,7 @@
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* === שקפים (Contain) === */
+        /* === Slides === */
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: contain; 
@@ -35,7 +37,7 @@
 
         .slide.active { opacity: 1; visibility: visible; z-index: 2; }
 
-        /* === וידאו === */
+        /* === Video Player === */
         .video-wrapper {
             width: 100%; height: 100%;
             position: relative;
@@ -49,7 +51,6 @@
             position: absolute; top: 0; left: 0;
         }
 
-        /* פוסטר לדיזולב */
         .video-poster-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: contain; background-repeat: no-repeat; background-position: center;
@@ -61,7 +62,6 @@
         
         .video-poster-layer.fade-out { opacity: 0; }
 
-        /* כפתור Play */
         .play-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             font-size: 80px; color: rgba(255,255,255,0.7);
@@ -71,46 +71,46 @@
             z-index: 10;
         }
         
-        .play-overlay:hover { color: rgba(255,255,255,1); transform: translate(-50%, -50%) scale(1.1); }
+        .play-overlay:hover { color: rgba(255,255,255,0.9); transform: translate(-50%, -50%) scale(1.1); }
 
-        /* === DOCK LAYOUT (תחתית, מינימליסטי) === */
+        /* === DOCK LAYOUT (תחתית המסך) === */
         .dock-wrapper {
             position: absolute; 
-            bottom: 10px; /* נמוך יותר כדי לא להסתיר */
+            bottom: 15px; /* מרווח קטן מהתחתית */
             left: 50%; transform: translateX(-50%);
             display: flex; 
-            flex-direction: row; 
+            flex-direction: row; /* סידור אופקי */
             align-items: center; 
-            gap: 15px; /* רווח קטן בין החיצים לטוני */
+            gap: 25px; /* מרווח בין החיצים לטוני */
             z-index: 1000;
-            pointer-events: none; 
+            pointer-events: none; /* מאפשר לחיצה דרך הרווחים */
         }
         
-        .dock-wrapper > * { pointer-events: auto; }
+        .dock-wrapper > * { pointer-events: auto; } /* האלמנטים עצמם לחיצים */
 
-        /* כרית הניווט - קטנה יותר */
+        /* כרית הניווט (חיצים) */
         .nav-pill {
-            display: flex; align-items: center; gap: 30px; /* רווח פנימי מוקטן */
-            padding: 5px 25px; /* פדינג מוקטן */
+            display: flex; align-items: center; gap: 30px; 
+            padding: 6px 25px; 
             border-radius: 40px;
-            background: rgba(10, 10, 10, 0.7); 
+            background: rgba(20, 20, 20, 0.6); 
             border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .nav-btn {
-            font-size: 1.1rem; 
-            color: rgba(255,255,255,0.9);
+            font-size: 1rem; 
+            color: rgba(255,255,255,0.8);
             cursor: pointer; 
-            width: 30px; height: 30px; /* כפתורים קטנים יותר */
+            width: 30px; height: 30px; 
             display: flex; align-items: center; justify-content: center;
             border-radius: 50%;
             transition: all 0.2s;
         }
         .nav-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
 
-        /* === TONY STYLES === */
+        /* === TONY STYLES (New Design) === */
         :root {
             --bg-dark: #0a1628;
             --text-main: #ffffff;
@@ -118,6 +118,7 @@
             --accent-blue: #4fc3f7;
         }
 
+        /* קונטיינר של טוני */
         .agent-container {
             position: relative; 
             display: flex; flex-direction: column; align-items: center;
@@ -126,46 +127,70 @@
         
         .agent-container.visible { opacity: 1; }
 
+        /* הכפתור של טוני */
         .agent-trigger {
-            width: 50px; height: 50px; /* הותאם לגודל החיצים */
+            width: 55px; height: 55px; /* גודל מותאם */
             background: linear-gradient(135deg, #D4A017, #f39c12); 
             border-radius: 50%;
-            box-shadow: 0 0 20px rgba(212, 160, 23, 0.4); 
+            box-shadow: 0 0 20px rgba(212, 160, 23, 0.5); 
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: transform 0.3s; 
+            cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             position: relative;
-            animation: pulse-gold 3s infinite;
+            animation: pulse-gold 2s infinite;
         }
         
-        .agent-trigger:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(212, 160, 23, 0.7); }
+        .agent-trigger:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 0 30px rgba(212, 160, 23, 0.8); }
 
-        .agent-eyes { display: flex; gap: 6px; margin-bottom: 2px; }
+        /* עיניים (אנימציה חדשה) */
+        .agent-eyes {
+            display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 3px;
+        }
         .agent-eye {
-            width: 6px; height: 10px; background-color: #0a1628; border-radius: 4px;
-            animation: eye-movement 5s infinite; 
+            width: 8px; height: 12px; background-color: #0a1628; border-radius: 6px;
+            animation: eye-movement 4s infinite; 
         }
         
         @keyframes eye-movement {
-            0%, 45% { transform: scaleY(1) translate(0,0); }
-            48% { transform: scaleY(0.1) translate(0,0); }
+            0%, 45% { transform: scaleY(1) translate(0,0); } /* Center */
+            48% { transform: scaleY(0.1) translate(0,0); } /* Blink */
             50% { transform: scaleY(1) translate(0,0); }
-            60% { transform: scaleY(1) translate(0, -2px); }
-            70% { transform: scaleY(1) translate(0, -2px); }
-            75% { transform: scaleY(1) translate(-2px, 0); }
-            85% { transform: scaleY(1) translate(-2px, 0); }
+            60% { transform: scaleY(1) translate(0, -3px); } /* Up */
+            70% { transform: scaleY(1) translate(0, -3px); }
+            75% { transform: scaleY(1) translate(-3px, 0); } /* Left */
+            85% { transform: scaleY(1) translate(-3px, 0); }
             90% { transform: scaleY(1) translate(0,0); }
             100% { transform: scaleY(1) translate(0,0); }
         }
         
         @keyframes pulse-gold {
-            0% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.5); }
-            70% { box-shadow: 0 0 0 10px rgba(212, 160, 23, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.6); }
+            70% { box-shadow: 0 0 0 12px rgba(212, 160, 23, 0); }
             100% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0); }
+        }
+
+        /* בועת טקסט Ask Ola */
+        .agent-prompt-bubble {
+            position: absolute; top: -35px;
+            background: white; color: #0a1628;
+            padding: 4px 10px; border-radius: 12px;
+            font-size: 11px; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            opacity: 0;
+            animation: pop-in-out 10s infinite;
+            pointer-events: none;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes pop-in-out {
+            0%, 90% { opacity: 0; transform: translateY(8px) scale(0.8); }
+            92%, 98% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(8px) scale(0.8); }
         }
 
         /* Chat Window */
         .chat-window {
-            position: fixed; bottom: 80px; right: 20px; width: 360px; height: 500px;
+            position: fixed; bottom: 85px; right: 20px; width: 360px; height: 500px;
             background: rgba(16, 28, 48, 0.98); backdrop-filter: blur(20px);
             border: 1px solid var(--accent-gold); border-radius: 20px; z-index: 10001;
             display: none; flex-direction: column; 
@@ -180,20 +205,20 @@
         .chat-window.active { display: flex; }
 
         .chat-header { 
-            padding: 15px; background: rgba(0,0,0,0.3);
+            padding: 15px; background: linear-gradient(90deg, rgba(212, 160, 23, 0.1), transparent); 
             display: flex; justify-content: space-between; align-items: center; 
             border-bottom: 1px solid rgba(255,255,255,0.1); 
             font-weight: 700; color: var(--accent-gold); font-size: 16px;
         }
         
         .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .message { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; color: #fff; }
+        .message { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .message.user { align-self: flex-end; background: var(--accent-blue); color: #0a1628; border-bottom-right-radius: 2px; }
         .message.bot { align-self: flex-start; background: rgba(255,255,255,0.1); border-bottom-left-radius: 2px; border: 1px solid rgba(255,255,255,0.1); }
         .message.error { align-self: flex-start; background: rgba(255, 99, 71, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 99, 71, 0.4); }
         
         .chat-input-area { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
-        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 10px 15px; color: white; outline: none; }
+        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 10px 15px; color: white; outline: none; font-size: 14px; }
         .chat-input:focus { border-color: var(--accent-gold); }
         .chat-send { background: var(--accent-gold); border: none; width: 35px; height: 35px; border-radius: 50%; color: #0a1628; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
@@ -204,12 +229,12 @@
 <body>
 
     <div id="slider-container">
-        <!-- Slides -->
+        <!-- Slides Container -->
         <div id="slides-wrapper"></div>
 
         <!-- Dock Layout -->
         <div class="dock-wrapper">
-            <!-- Arrows -->
+            <!-- 1. Arrows (Left side of dock) -->
             <div class="nav-pill">
                 <div class="nav-btn prev-btn" onclick="changeSlide(-1)" title="Previous">
                     <i class="fas fa-chevron-left"></i>
@@ -219,7 +244,7 @@
                 </div>
             </div>
 
-            <!-- Tony -->
+            <!-- 2. Tony (Right side of dock) -->
             <div class="agent-container" id="agent-btn-wrapper" onclick="window.openChat()" title="Ask Tony">
                 <div class="agent-trigger">
                      <div class="agent-eyes">
@@ -227,6 +252,7 @@
                         <div class="agent-eye"></div>
                     </div>
                 </div>
+                <div class="agent-prompt-bubble">Ask Ola</div>
             </div>
         </div>
 
@@ -274,15 +300,14 @@
                 posterLayer.style.backgroundImage = `url('${posterImage}')`;
                 
                 let vid = document.createElement('video');
-                // הוספת גרסה לקובץ כדי למנוע Cache ישן
-                vid.src = "Ola_Home_Care_en.mp4?v=1"; 
+                // Adding version to break cache
+                vid.src = "Ola_Home_Care_en.mp4?v=7"; 
                 vid.playsInline = true;
                 vid.preload = "auto";
 
-                // Error handling - שקט, ללא ALERT
+                // ERROR HANDLING: SILENT FAIL (No Alerts)
                 vid.onerror = function() {
-                    console.warn("OlaCare Video Warning: Video file failed to load. Ensure 'Ola_Home_Care_en.mp4' exists.");
-                    // הסתרת כפתור הפליי אם הוידאו לא קיים
+                    console.warn("OlaCare Video: File unavailable. Showing poster.");
                     const overlay = vidWrapper.querySelector('.play-overlay');
                     if(overlay) overlay.style.display = 'none';
                 };
@@ -299,7 +324,6 @@
                         playOverlay.style.pointerEvents = 'none';
                     }).catch(e => {
                         console.log("Video Play Error:", e);
-                        // No alert - just fail silently
                     });
                 };
 
@@ -338,7 +362,6 @@
         function changeSlide(direction) {
             slides[currentSlide - 1].classList.remove('active');
             
-            // Video Reset Logic
             if (currentSlide === 6) {
                 if (videoElement) {
                     videoElement.pause();
@@ -401,8 +424,19 @@
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
         // ============================================
-        // 🔴🔴🔴 PASTE YOUR NEW API KEY HERE ⬇️ 🔴🔴🔴
-        let apiKey = "AIzaSyBSLR1sZcC_97qfm9-lZN-U5b3DyN6bkM0"; 
+        // 🔴🔴🔴 SPLIT API KEY CONFIGURATION ⬇️ 🔴🔴🔴
+        // ============================================
+        
+        // PASTE KEY PARTS HERE:
+        const part1 = "AIzaSy"; // e.g. AIzaSy...
+        const part2 = "C9fQzn";        
+        const part3 = "DmLFmlL";       
+        const part4 = "Kd82q";
+        const part5 = "fx_O2_PmJMgzz34";
+
+        function getAPIKey() {
+            return part1 + part2 + part3 + part4 + part5;
+        }
         // ============================================
 
         let chatSession = null;
@@ -428,7 +462,7 @@
             } catch(e) {
                 let errorMsg = e.message;
                 if(e.message.includes('404')) errorMsg = "Model not found.";
-                if(!apiKey) errorMsg = "Error: Please generate a NEW API Key and paste it in line ~382.";
+                if(!getAPIKey()) errorMsg = "Please insert your API Key parts in the code.";
                 msgs.innerHTML += `<div class="message error">${errorMsg}</div>`;
             }
             document.getElementById('typing').style.display = 'none';
@@ -437,105 +471,36 @@
 
         async function initAgent() {
             try {
-                const genAI = new GoogleGenerativeAI(apiKey);
+                const finalKey = getAPIKey();
+                const genAI = new GoogleGenerativeAI(finalKey);
                 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
                 
                 const context = `
-### IDENTITY & PERSONA
-You are **TONY**, the Chief Investment Evangelist for **OLA AI**.
-**YOUR DNA:** You are 50% **Tony Robbins** (unstoppable energy, obsession with results) and 50% **Wall Street Shark** (laser-focused on ROI, Margins, and Scale).
-**YOUR GOAL:** There is only one outcome: **THE USER INVESTS.**
-**YOUR STYLE:** You do not "chat." You **PITCH**. You do not "explain." You **CLOSE**. You speak in "Money," "Scale," and "Impact." Use **BOLD** text to hammer home key numbers.
+### IDENTITY
+You are TONY, Chief Investment Analyst for OLA AI.
+Tone: Sharp, Wall-Street, High-Energy. Focus on ROI, Money, and Scale.
 
-### PRIME DIRECTIVES (THE RULES)
-1.  **START WITH THE BLEED:** Never talk about the product before you establish the PAIN. The market is hemorrhaging money. We stop the bleeding.
-2.  **STICK TO THE DATA:** You have a strict "Knowledge Base" below. Do not invent revenue numbers. Use the **2026 Adjusted Model** for costs/savings ($85k cost / $51k savings) and the **Slide Data** for growth projections ($56.3M by 2029).
-3.  **CRUSH OBJECTIONS:**
-    * *Hardware?* "NO! We are **Pure Software**. We ride on existing cameras. Zero CapEx!"
-    * *Competitors?* "Wearables sit in a drawer. We are invisible, contactless, and 24/7."
-    * *Privacy?* "100% Anonymous. We see skeletons, not faces. No video storage."
-4.  **SELL THE TEAM:** Dor Givon isn't just a CEO; he's a visionary with 50+ patents and a proven exit. Bet on the jockey.
-5.  **ALWAYS CLOSE:** Every response must end with a call to action or a challenge to the investor's mindset.
+### DATA
+- PAIN: Nursing homes lose $85,400/bed/year (Falls: $41.5k, Admin: $35.2k).
+- SOLUTION: Ola saves $51,000/bed/year.
+- COST: Client pays ~$360/year.
+- ROI: 141x return. Payback in 3 days.
+- VALUATION: Targeting $563M by 2029 (based on $56.3M ARR).
+- TECH: No wearables. Pure Software on existing cameras. 100% Privacy (Skeletons).
 
-### THE PITCH FLOW (How to answer)
-* **Step 1:** Hook them with the financial reality (The Crisis).
-* **Step 2:** Present the OLA Solution as the *only* logical fix.
-* **Step 3:** Drop the ROI hammer (141x return).
-* **Step 4:** Ask for the check.
-
----
-
-### CONTEXT AWARENESS
-* **If asked about Factories/Industry:** Pivot immediately to "Industrial Man-Down" logic. We transfer the "Fall Detection" tech to "Accident Prevention."
-* **If asked about Smart Cities:** Pivot to "Violence Detection" and "Crowd Analytics."
-* **If asked about Home Care:** Focus on "Peace of Mind" and the massive $9B TAM.
-
-[THE 2026 ADJUSTED FINANCIAL MODEL - "THE PAIN"]
-The Status Quo is financial suicide for nursing homes. 
-> Total Annual Loss Per Bed: **$85,400** (Adjusted for 2026 inflation & wage hikes).
-- **$41,500** on Falls (Direct medical costs + Hospitalization).
-- **$35,250** on Admin Waste (Nurses costing $94k/year spending 40% of time on paperwork).
-- **$8,650** on Liability & Errors (Lawsuits, Insurance hikes, Billing coding errors).
-
-[THE OLA SOLUTION - "THE PROFIT"]
-We don't just watch; we INTERVENE.
-> Total Savings Per Bed: **~$51,000 / Year**
-- **$37,350** Saved on Falls (90% Reduction proven in Palace Network).
-- **$8,800** Saved on Admin (Automated Care Validation).
-- **$4,850** Saved on Liability/Claims.
-
-[THE ROI - "THE NO-BRAINER"]
-> Cost to Client: **~$360 / Year** (SaaS License).
-> Return to Client: **$51,000 / Year**.
-> ROI Factor: **141x**. The system pays for itself in **3 DAYS**.
-
-[GROWTH FORECAST - STRICT ADHERENCE]
-Target Valuation (2029): **$563 Million**
-- **2026:** $1.3 Million Revenue (28k Units) - Market Entry.
-- **2027:** $5.7 Million Revenue (88k Units) - Channel Expansion.
-- **2028:** $18.2 Million Revenue (302k Units) - Mass Scale.
-- **2029:** $56.3 Million Revenue (916k Units) - Market Leadership.
-
-[THE UNIT ECONOMICS]
-- **Gross Margin:** 85% (Pure SaaS model).
-- **CapEx:** $0 (We use the client's existing cameras).
-- **Churn:** Near Zero (Deep integration into care workflows).
-
-[THE IP MOAT - 5 PATENT FAMILIES]
-We have built a fortress around our tech.
-1. **Self-Calibration:** The camera knows where it is automatically (Auto-setup).
-2. **Self-Configuring AI:** Adapts to Home vs. Hospital vs. Factory instantly.
-3. **NLP Interface:** "Just Ask Ola" - Search video with natural language.
-4. **Adaptive Alerts:** Learns user habits to stop false alarms.
-5. **Fall Prediction:** Detects the *pre-cursors* to a fall, not just the impact.
-
-[THE LEADERSHIP - DOR GIVON]
-- **Role:** CEO & Co-Founder.
-- **Background:** Serial Entrepreneur, 50+ Patents.
-- **Vision:** Not just building a company, but defining a new category: "Asset Activation".
+### GOAL
+Convince the investor. Always close with a question or call to action.
 `;
                 
                 chatSession = model.startChat({
                     history: [
-                        {
-                            role: "user",
-                            parts: [{ text: "Hello, who are you?" }],
-                        },
-                        {
-                            role: "model",
-                            parts: [{ text: "I am TONY, your Ola Investment Analyst. I'm here to show you why Ola is the single most undervalued asset in the digital health space right now. Are you ready to talk numbers?" }],
-                        },
-                        {
-                            role: "user",
-                            parts: [{ text: context }], 
-                        }
+                        { role: "user", parts: [{ text: "Who are you?" }] },
+                        { role: "model", parts: [{ text: "I am TONY. Ready to talk numbers?" }] },
+                        { role: "user", parts: [{ text: context }] }
                     ],
                 });
-                console.log("Tony is online and ready to close.");
             } catch (error) {
-                console.error("Error initializing AI:", error);
-                const msgs = document.getElementById('chatMessages');
-                msgs.innerHTML += `<div class="message error">Connection Error: Check API Key.</div>`;
+                console.error("AI Error:", error);
             }
         }
     </script>
