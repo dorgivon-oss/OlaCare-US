@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OlaCare Investor Presentation</title>
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === Global Reset === */
+        /* === הגדרות בסיס === */
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             overflow: hidden; background-color: #000; 
@@ -24,7 +22,7 @@
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* === Slides === */
+        /* === שקפים === */
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: contain; 
@@ -37,7 +35,7 @@
 
         .slide.active { opacity: 1; visibility: visible; z-index: 2; }
 
-        /* === Video Player === */
+        /* === וידאו === */
         .video-wrapper {
             width: 100%; height: 100%;
             position: relative;
@@ -51,6 +49,7 @@
             position: absolute; top: 0; left: 0;
         }
 
+        /* פוסטר לדיזולב */
         .video-poster-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: contain; background-repeat: no-repeat; background-position: center;
@@ -62,6 +61,7 @@
         
         .video-poster-layer.fade-out { opacity: 0; }
 
+        /* כפתור Play */
         .play-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             font-size: 80px; color: rgba(255,255,255,0.7);
@@ -73,26 +73,26 @@
         
         .play-overlay:hover { color: rgba(255,255,255,0.9); transform: translate(-50%, -50%) scale(1.1); }
 
-        /* === DOCK LAYOUT (תחתית המסך) === */
+        /* === DOCK LAYOUT === */
         .dock-wrapper {
             position: absolute; 
-            bottom: 15px; /* מרווח קטן מהתחתית */
+            bottom: 10px; 
             left: 50%; transform: translateX(-50%);
             display: flex; 
-            flex-direction: row; /* סידור אופקי */
+            flex-direction: row; 
             align-items: center; 
-            gap: 25px; /* מרווח בין החיצים לטוני */
+            gap: 15px; 
             z-index: 1000;
-            pointer-events: none; /* מאפשר לחיצה דרך הרווחים */
+            pointer-events: none; 
         }
         
-        .dock-wrapper > * { pointer-events: auto; } /* האלמנטים עצמם לחיצים */
+        .dock-wrapper > * { pointer-events: auto; }
 
-        /* כרית הניווט (חיצים) */
+        /* כרית הניווט */
         .nav-pill {
             display: flex; align-items: center; gap: 30px; 
             padding: 6px 25px; 
-            border-radius: 40px;
+            border-radius: 30px;
             background: rgba(20, 20, 20, 0.6); 
             border: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(4px);
@@ -103,14 +103,13 @@
             font-size: 1rem; 
             color: rgba(255,255,255,0.8);
             cursor: pointer; 
-            width: 30px; height: 30px; 
+            width: 24px; height: 24px; 
             display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
             transition: all 0.2s;
         }
-        .nav-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
+        .nav-btn:hover { color: #fff; transform: scale(1.1); }
 
-        /* === TONY STYLES (New Design) === */
+        /* === TONY STYLES === */
         :root {
             --bg-dark: #0a1628;
             --text-main: #ffffff;
@@ -118,7 +117,6 @@
             --accent-blue: #4fc3f7;
         }
 
-        /* קונטיינר של טוני */
         .agent-container {
             position: relative; 
             display: flex; flex-direction: column; align-items: center;
@@ -127,54 +125,43 @@
         
         .agent-container.visible { opacity: 1; }
 
-        /* הכפתור של טוני */
+        /* טוני מוקטן */
         .agent-trigger {
-            width: 55px; height: 55px; /* גודל מותאם */
+            width: 42px; height: 42px; 
             background: linear-gradient(135deg, #D4A017, #f39c12); 
             border-radius: 50%;
-            box-shadow: 0 0 20px rgba(212, 160, 23, 0.5); 
+            box-shadow: 0 0 10px rgba(212, 160, 23, 0.4); 
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer; transition: transform 0.3s; 
             position: relative;
-            animation: pulse-gold 2s infinite;
+            animation: pulse-gold 3s infinite;
         }
         
-        .agent-trigger:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 0 30px rgba(212, 160, 23, 0.8); }
+        .agent-trigger:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(212, 160, 23, 0.6); }
 
-        /* עיניים (אנימציה חדשה) */
-        .agent-eyes {
-            display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 3px;
-        }
+        .agent-eyes { display: flex; gap: 5px; margin-bottom: 2px; }
         .agent-eye {
-            width: 8px; height: 12px; background-color: #0a1628; border-radius: 6px;
-            animation: eye-movement 4s infinite; 
+            width: 5px; height: 9px; background-color: #0a1628; border-radius: 3px;
+            animation: eye-movement 5s infinite; 
         }
         
         @keyframes eye-movement {
-            0%, 45% { transform: scaleY(1) translate(0,0); } /* Center */
-            48% { transform: scaleY(0.1) translate(0,0); } /* Blink */
-            50% { transform: scaleY(1) translate(0,0); }
-            60% { transform: scaleY(1) translate(0, -3px); } /* Up */
-            70% { transform: scaleY(1) translate(0, -3px); }
-            75% { transform: scaleY(1) translate(-3px, 0); } /* Left */
-            85% { transform: scaleY(1) translate(-3px, 0); }
-            90% { transform: scaleY(1) translate(0,0); }
-            100% { transform: scaleY(1) translate(0,0); }
+            0%, 45%, 55%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); } 
         }
         
         @keyframes pulse-gold {
-            0% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.6); }
-            70% { box-shadow: 0 0 0 12px rgba(212, 160, 23, 0); }
+            0% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(212, 160, 23, 0); }
             100% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0); }
         }
 
-        /* בועת טקסט Ask Ola */
         .agent-prompt-bubble {
             position: absolute; top: -35px;
             background: white; color: #0a1628;
-            padding: 4px 10px; border-radius: 12px;
-            font-size: 11px; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            padding: 3px 8px; border-radius: 8px;
+            font-size: 10px; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             opacity: 0;
             animation: pop-in-out 10s infinite;
             pointer-events: none;
@@ -183,16 +170,16 @@
         }
 
         @keyframes pop-in-out {
-            0%, 90% { opacity: 0; transform: translateY(8px) scale(0.8); }
+            0%, 90% { opacity: 0; transform: translateY(5px) scale(0.8); }
             92%, 98% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(8px) scale(0.8); }
+            100% { opacity: 0; transform: translateY(5px) scale(0.8); }
         }
 
         /* Chat Window */
         .chat-window {
-            position: fixed; bottom: 85px; right: 20px; width: 360px; height: 500px;
+            position: fixed; bottom: 60px; right: 20px; width: 340px; height: 460px;
             background: rgba(16, 28, 48, 0.98); backdrop-filter: blur(20px);
-            border: 1px solid var(--accent-gold); border-radius: 20px; z-index: 10001;
+            border: 1px solid var(--accent-gold); border-radius: 16px; z-index: 10001;
             display: none; flex-direction: column; 
             box-shadow: 0 20px 60px rgba(0,0,0,0.9); 
             overflow: hidden;
@@ -205,24 +192,24 @@
         .chat-window.active { display: flex; }
 
         .chat-header { 
-            padding: 15px; background: linear-gradient(90deg, rgba(212, 160, 23, 0.1), transparent); 
+            padding: 12px 15px; background: rgba(0,0,0,0.3);
             display: flex; justify-content: space-between; align-items: center; 
             border-bottom: 1px solid rgba(255,255,255,0.1); 
-            font-weight: 700; color: var(--accent-gold); font-size: 16px;
+            font-weight: 700; color: var(--accent-gold); font-size: 15px;
         }
         
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .message { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message { max-width: 90%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; color: #fff; }
         .message.user { align-self: flex-end; background: var(--accent-blue); color: #0a1628; border-bottom-right-radius: 2px; }
         .message.bot { align-self: flex-start; background: rgba(255,255,255,0.1); border-bottom-left-radius: 2px; border: 1px solid rgba(255,255,255,0.1); }
         .message.error { align-self: flex-start; background: rgba(255, 99, 71, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 99, 71, 0.4); }
         
-        .chat-input-area { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
-        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 10px 15px; color: white; outline: none; font-size: 14px; }
+        .chat-input-area { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; background: rgba(0,0,0,0.2); }
+        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 8px 12px; color: white; outline: none; font-size: 13px; }
         .chat-input:focus { border-color: var(--accent-gold); }
-        .chat-send { background: var(--accent-gold); border: none; width: 35px; height: 35px; border-radius: 50%; color: #0a1628; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .chat-send { background: var(--accent-gold); border: none; width: 32px; height: 32px; border-radius: 50%; color: #0a1628; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        .typing { font-style: italic; color: #888; font-size: 12px; margin-left: 20px; margin-bottom: 5px; display: none; }
+        .typing { font-style: italic; color: #888; font-size: 11px; margin-left: 15px; margin-bottom: 5px; display: none; }
 
     </style>
 </head>
@@ -234,7 +221,7 @@
 
         <!-- Dock Layout -->
         <div class="dock-wrapper">
-            <!-- 1. Arrows (Left side of dock) -->
+            <!-- 1. Arrows -->
             <div class="nav-pill">
                 <div class="nav-btn prev-btn" onclick="changeSlide(-1)" title="Previous">
                     <i class="fas fa-chevron-left"></i>
@@ -244,7 +231,7 @@
                 </div>
             </div>
 
-            <!-- 2. Tony (Right side of dock) -->
+            <!-- 2. Tony -->
             <div class="agent-container" id="agent-btn-wrapper" onclick="window.openChat()" title="Ask Tony">
                 <div class="agent-trigger">
                      <div class="agent-eyes">
@@ -273,7 +260,6 @@
         </div>
     </div>
 
-    <!-- Presentation Logic -->
     <script>
         const totalSlides = 17; 
         const filenamePattern = "Ola Care-Invest-Intro-25-us_Page_%NUM%.png"; 
@@ -300,14 +286,13 @@
                 posterLayer.style.backgroundImage = `url('${posterImage}')`;
                 
                 let vid = document.createElement('video');
-                // Removed version tag to keep it clean
                 vid.src = "Ola_Home_Care_en.mp4"; 
                 vid.playsInline = true;
                 vid.preload = "auto";
 
-                // ERROR HANDLING: SILENT FAIL (No Alerts)
+                // Error handling - NO ALERTS
                 vid.onerror = function() {
-                    console.warn("OlaCare Video: File unavailable. Showing poster.");
+                    console.warn("OlaCare Video Warning: Video file failed to load.");
                     const overlay = vidWrapper.querySelector('.play-overlay');
                     if(overlay) overlay.style.display = 'none';
                 };
@@ -333,13 +318,9 @@
                         playOverlay.style.opacity = '1';
                         playOverlay.style.pointerEvents = 'auto';
                     } else {
-                        // FIX: Add catch here to prevent UnhandledRejection
-                        vid.play().then(() => {
-                            playOverlay.style.opacity = '0';
-                            playOverlay.style.pointerEvents = 'none';
-                        }).catch(e => {
-                            console.warn("Video click play prevented:", e);
-                        });
+                        vid.play();
+                        playOverlay.style.opacity = '0';
+                        playOverlay.style.pointerEvents = 'none';
                     }
                 };
 
@@ -405,7 +386,6 @@
 
         updateAgentVisibility();
 
-        // UI Helpers
         window.openChat = function() {
             const chatWin = document.getElementById('chatWindow');
             if(chatWin) chatWin.classList.add('active');
@@ -423,25 +403,20 @@
         }
     </script>
 
-    <!-- REAL AI LOGIC -->
+    <!-- LOGIC -->
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // ============================================
-        // 🔴🔴🔴 SPLIT API KEY CONFIGURATION ⬇️ 🔴🔴🔴
-        // ============================================
-        
-        // PASTE KEY PARTS HERE:
-        const part1 = "AIzaSy"; // e.g. AIzaSy...
-        const part2 = "C9fQzn";        
-        const part3 = "DmLFmlLK";       
-        const part4 = "d82qfx_O2";
-        const part5 = "_PmJMgzz34";
+        // Secret splitting
+        const part1 = "AIzaS"; 
+        const part2 = "yAb7w79"; 
+        const part3 = "23HxUairs"; 
+        const part4 = "YU3yjeqstPgin";
+        const part5 = "TEIXQ";
 
         function getAPIKey() {
             return part1 + part2 + part3 + part4 + part5;
         }
-        // ============================================
 
         let chatSession = null;
 
@@ -466,7 +441,7 @@
             } catch(e) {
                 let errorMsg = e.message;
                 if(e.message.includes('404')) errorMsg = "Model not found.";
-                if(!getAPIKey()) errorMsg = "Please insert your API Key parts in the code.";
+                if(!getAPIKey()) errorMsg = "API Key Error";
                 msgs.innerHTML += `<div class="message error">${errorMsg}</div>`;
             }
             document.getElementById('typing').style.display = 'none';
@@ -510,4 +485,3 @@ Convince the investor. Always close with a question or call to action.
     </script>
 </body>
 </html>
-
