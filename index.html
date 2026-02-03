@@ -300,8 +300,8 @@
                 posterLayer.style.backgroundImage = `url('${posterImage}')`;
                 
                 let vid = document.createElement('video');
-                // Adding version to break cache
-                vid.src = "Ola_Home_Care_en.mp4?v=7"; 
+                // Removed version tag to keep it clean
+                vid.src = "Ola_Home_Care_en.mp4"; 
                 vid.playsInline = true;
                 vid.preload = "auto";
 
@@ -333,9 +333,13 @@
                         playOverlay.style.opacity = '1';
                         playOverlay.style.pointerEvents = 'auto';
                     } else {
-                        vid.play();
-                        playOverlay.style.opacity = '0';
-                        playOverlay.style.pointerEvents = 'none';
+                        // FIX: Add catch here to prevent UnhandledRejection
+                        vid.play().then(() => {
+                            playOverlay.style.opacity = '0';
+                            playOverlay.style.pointerEvents = 'none';
+                        }).catch(e => {
+                            console.warn("Video click play prevented:", e);
+                        });
                     }
                 };
 
@@ -428,11 +432,11 @@
         // ============================================
         
         // PASTE KEY PARTS HERE:
-        const part1 = "AIzaSy"; // e.g. AIzaSy...
-        const part2 = "C9fQzn";        
-        const part3 = "DmLFmlL";       
-        const part4 = "Kd82q";
-        const part5 = "fx_O2_PmJMgzz34";
+        const part1 = ""; // e.g. AIzaSy...
+        const part2 = "";        
+        const part3 = "";       
+        const part4 = "";
+        const part5 = "";
 
         function getAPIKey() {
             return part1 + part2 + part3 + part4 + part5;
