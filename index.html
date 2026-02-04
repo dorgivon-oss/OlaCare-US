@@ -2,27 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta tag optimized for mobile safety areas & preventing zoom issues -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>OlaCare Investor Presentation</title>
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === הגדרות בסיס === */
+        /* === BASE SETTINGS === */
         body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
+            margin: 0; padding: 0; width: 100%; 
+            /* Dynamic height handling for mobile browsers to avoid address bar issues */
+            height: 100vh; 
+            height: 100dvh; 
             overflow: hidden; background-color: #000; 
             font-family: 'Segoe UI', sans-serif;
+            touch-action: manipulation; /* Prevents double-tap zoom */
         }
         
         #slider-container {
-            width: 100vw; height: 100vh; position: relative;
+            width: 100vw; 
+            height: 100%;
+            position: relative;
             background: #000;
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* === שקפים === */
+        /* === SLIDES === */
         .slide {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: contain; 
@@ -35,7 +42,7 @@
 
         .slide.active { opacity: 1; visibility: visible; z-index: 2; }
 
-        /* === וידאו === */
+        /* === VIDEO WRAPPER === */
         .video-wrapper {
             width: 100%; height: 100%;
             position: relative;
@@ -49,7 +56,6 @@
             position: absolute; top: 0; left: 0;
         }
 
-        /* פוסטר לדיזולב */
         .video-poster-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: contain; background-repeat: no-repeat; background-position: center;
@@ -61,7 +67,6 @@
         
         .video-poster-layer.fade-out { opacity: 0; }
 
-        /* כפתור Play */
         .play-overlay {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             font-size: 80px; color: rgba(255,255,255,0.7);
@@ -73,48 +78,53 @@
         
         .play-overlay:hover { color: rgba(255,255,255,0.9); transform: translate(-50%, -50%) scale(1.1); }
 
-        /* === DOCK LAYOUT === */
+        /* === DOCK LAYOUT (FIXED & RAISED FOR MOBILE) === */
         .dock-wrapper {
-            position: absolute; 
-            bottom: 10px; 
+            position: fixed; 
+            bottom: 30px; 
             left: 50%; transform: translateX(-50%);
             display: flex; 
             flex-direction: row; 
             align-items: center; 
-            gap: 15px; 
-            z-index: 1000;
+            gap: 20px; 
+            z-index: 9999; 
             pointer-events: none; 
+            width: auto;
+            max-width: 95vw;
+            transition: bottom 0.3s ease;
         }
         
         .dock-wrapper > * { pointer-events: auto; }
 
-        /* כרית הניווט */
+        /* Navigation Pill */
         .nav-pill {
             display: flex; align-items: center; gap: 30px; 
-            padding: 6px 25px; 
-            border-radius: 30px;
-            background: rgba(20, 20, 20, 0.6); 
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(4px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            padding: 8px 30px; 
+            border-radius: 40px;
+            background: rgba(20, 20, 20, 0.7); 
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
         }
 
         .nav-btn {
-            font-size: 1rem; 
+            font-size: 1.2rem; 
             color: rgba(255,255,255,0.8);
             cursor: pointer; 
-            width: 24px; height: 24px; 
+            width: 30px; height: 30px; 
             display: flex; align-items: center; justify-content: center;
             transition: all 0.2s;
+            min-width: 44px; min-height: 44px; 
         }
-        .nav-btn:hover { color: #fff; transform: scale(1.1); }
+        .nav-btn:hover { color: #fff; transform: scale(1.15); text-shadow: 0 0 8px rgba(255,255,255,0.5); }
 
-        /* === TONY STYLES === */
+        /* === TONY (AI AGENT) STYLES === */
         :root {
             --bg-dark: #0a1628;
             --text-main: #ffffff;
-            --accent-gold: #D4A017;
+            --accent-gold: #FFD700;
             --accent-blue: #4fc3f7;
+            --glow-color: rgba(255, 215, 0, 0.8);
         }
 
         .agent-container {
@@ -125,63 +135,92 @@
         
         .agent-container.visible { opacity: 1; }
 
-        /* טוני מוקטן */
+        /* Tony's Avatar with Glow Animation */
         .agent-trigger {
-            width: 42px; height: 42px; 
+            width: 50px; height: 50px; 
             background: linear-gradient(135deg, #D4A017, #f39c12); 
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(212, 160, 23, 0.4); 
+            box-shadow: 0 0 20px var(--glow-color), inset 0 0 10px rgba(255,255,255,0.6); 
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: transform 0.3s; 
             position: relative;
-            animation: pulse-gold 3s infinite;
+            animation: aggressive-pulse 2s infinite; 
         }
         
-        .agent-trigger:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(212, 160, 23, 0.6); }
+        .agent-trigger:hover { transform: scale(1.1); animation: none; box-shadow: 0 0 30px var(--glow-color); }
 
-        .agent-eyes { display: flex; gap: 5px; margin-bottom: 2px; }
+        .agent-eyes { display: flex; gap: 6px; margin-bottom: 2px; }
         .agent-eye {
-            width: 5px; height: 9px; background-color: #0a1628; border-radius: 3px;
-            animation: eye-movement 5s infinite; 
+            width: 6px; height: 10px; background-color: #0a1628; border-radius: 3px;
+            animation: new-eye-sequence 8s infinite; 
+            transform-origin: center;
         }
         
-        @keyframes eye-movement {
-            0%, 45%, 55%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(0.1); } 
-        }
-        
-        @keyframes pulse-gold {
-            0% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.5); }
-            70% { box-shadow: 0 0 0 8px rgba(212, 160, 23, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0); }
+        /* Glow Pulse Animation */
+        @keyframes aggressive-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.8); }
+            50% { box-shadow: 0 0 25px 8px rgba(255, 215, 0, 0.4); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
         }
 
+        /* Eye Movement Animation */
+        @keyframes new-eye-sequence {
+            0% { transform: translate(0, 0) scaleY(1); }
+            10% { transform: translate(0, -4px) scaleY(1); }
+            12% { transform: translate(0, -4px) scaleY(0.1); } 
+            14% { transform: translate(0, -4px) scaleY(1); }
+            25% { transform: translate(0, 0) scaleY(1); }
+            27% { transform: translate(0, 0) scaleY(0.1); } 
+            29% { transform: translate(0, 0) scaleY(1); }
+            40% { transform: translate(-3px, -3px) scaleY(1); }
+            42% { transform: translate(-3px, -3px) scaleY(0.1); } 
+            44% { transform: translate(-3px, -3px) scaleY(1); }
+            55% { transform: translate(0, 0) scaleY(1); }
+            100% { transform: translate(0, 0) scaleY(1); }
+        }
+
+        /* Pop-up Bubble Animation */
         .agent-prompt-bubble {
-            position: absolute; top: -35px;
+            position: absolute; top: -50px;
             background: white; color: #0a1628;
-            padding: 3px 8px; border-radius: 8px;
-            font-size: 10px; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 6px 14px; border-radius: 12px;
+            font-size: 13px; font-weight: 800;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
             opacity: 0;
-            animation: pop-in-out 10s infinite;
+            animation: pop-in-out 24s infinite ease-in-out; 
             pointer-events: none;
             white-space: nowrap;
             font-family: 'Inter', sans-serif;
+            border: 2px solid var(--accent-gold);
+        }
+        
+        .agent-prompt-bubble::after {
+            content: ''; position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%);
+            border-width: 6px 6px 0; border-style: solid; border-color: white transparent transparent transparent;
         }
 
         @keyframes pop-in-out {
-            0%, 90% { opacity: 0; transform: translateY(5px) scale(0.8); }
-            92%, 98% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(5px) scale(0.8); }
+            0%, 90% { opacity: 0; transform: translateY(10px) scale(0.8); } 
+            92%, 96% { opacity: 1; transform: translateY(0) scale(1); } 
+            100% { opacity: 0; transform: translateY(10px) scale(0.8); }
         }
 
-        /* Chat Window */
+        /* === CHAT WINDOW === */
         .chat-window {
-            position: fixed; bottom: 60px; right: 20px; width: 340px; height: 460px;
-            background: rgba(16, 28, 48, 0.98); backdrop-filter: blur(20px);
-            border: 1px solid var(--accent-gold); border-radius: 16px; z-index: 10001;
-            display: none; flex-direction: column; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9); 
+            position: fixed; 
+            bottom: 80px; 
+            right: 30px; 
+            width: 400px; 
+            height: 550px; 
+            max-height: 80vh;
+            background: rgba(16, 28, 48, 0.98); 
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--accent-gold); 
+            border-radius: 16px; 
+            z-index: 10002;
+            display: none; 
+            flex-direction: column; 
+            box-shadow: 0 20px 80px rgba(0,0,0,0.9); 
             overflow: hidden;
             font-family: 'Inter', sans-serif;
             animation: slideUp 0.3s ease-out;
@@ -192,24 +231,54 @@
         .chat-window.active { display: flex; }
 
         .chat-header { 
-            padding: 12px 15px; background: rgba(0,0,0,0.3);
+            padding: 16px 20px; background: rgba(0,0,0,0.3);
             display: flex; justify-content: space-between; align-items: center; 
             border-bottom: 1px solid rgba(255,255,255,0.1); 
-            font-weight: 700; color: var(--accent-gold); font-size: 15px;
+            font-weight: 700; color: var(--accent-gold); font-size: 16px;
+            letter-spacing: 0.5px;
         }
         
-        .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .message { max-width: 90%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; color: #fff; }
-        .message.user { align-self: flex-end; background: var(--accent-blue); color: #0a1628; border-bottom-right-radius: 2px; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; color: #fff; }
+        .message.user { align-self: flex-end; background: var(--accent-blue); color: #0a1628; border-bottom-right-radius: 2px; font-weight: 500; }
         .message.bot { align-self: flex-start; background: rgba(255,255,255,0.1); border-bottom-left-radius: 2px; border: 1px solid rgba(255,255,255,0.1); }
         .message.error { align-self: flex-start; background: rgba(255, 99, 71, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 99, 71, 0.4); }
         
-        .chat-input-area { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; background: rgba(0,0,0,0.2); }
-        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 8px 12px; color: white; outline: none; font-size: 13px; }
-        .chat-input:focus { border-color: var(--accent-gold); }
-        .chat-send { background: var(--accent-gold); border: none; width: 32px; height: 32px; border-radius: 50%; color: #0a1628; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .chat-input-area { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
+        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 25px; padding: 12px 16px; color: white; outline: none; font-size: 14px; }
+        .chat-input:focus { border-color: var(--accent-gold); background: rgba(255,255,255,0.1); }
+        .chat-send { background: var(--accent-gold); border: none; width: 40px; height: 40px; border-radius: 50%; color: #0a1628; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: transform 0.2s;}
+        .chat-send:hover { transform: scale(1.1); }
         
-        .typing { font-style: italic; color: #888; font-size: 11px; margin-left: 15px; margin-bottom: 5px; display: none; }
+        .typing { font-style: italic; color: #888; font-size: 12px; margin-left: 20px; margin-bottom: 8px; display: none; }
+
+        /* === MOBILE MEDIA QUERIES (ANDROID/iOS FIXES) === */
+        @media (max-width: 768px) {
+            /* 1. Lift Dock significantly to avoid Android Nav Bars */
+            .dock-wrapper {
+                position: fixed; 
+                bottom: 15vh;    /* High safety margin */
+                padding-bottom: env(safe-area-inset-bottom);
+                gap: 15px;
+            }
+            
+            /* 2. Resize UI Elements for Mobile */
+            .nav-pill { padding: 6px 20px; gap: 20px; }
+            .nav-btn { width: 36px; height: 36px; font-size: 1.2rem; }
+            .agent-trigger { width: 48px; height: 48px; }
+
+            /* 3. Adjust Chat Window so it doesn't cover the Agent */
+            .chat-window {
+                width: 90vw;
+                height: 50vh; 
+                right: 5vw;
+                bottom: 25vh; /* Starts above the dock */
+                z-index: 10005;
+            }
+
+            /* 4. Play Button Size */
+            .play-overlay { font-size: 50px; }
+        }
 
     </style>
 </head>
@@ -239,32 +308,34 @@
                         <div class="agent-eye"></div>
                     </div>
                 </div>
-                <div class="agent-prompt-bubble">Ask Ola</div>
+                <div class="agent-prompt-bubble">ASK TONY</div>
             </div>
         </div>
 
         <!-- Chat Window -->
         <div class="chat-window" id="chatWindow">
             <div class="chat-header">
-                <div><i class="fas fa-robot"></i> Ola AI Analyst</div>
-                <div style="cursor:pointer;" onclick="window.toggleChatDisplay()"><i class="fas fa-times"></i></div>
+                <div><i class="fas fa-brain"></i> Ola Intelligence</div>
+                <div style="cursor:pointer; padding:5px;" onclick="window.toggleChatDisplay()"><i class="fas fa-times"></i></div>
             </div>
             <div class="chat-messages" id="chatMessages">
-                <div class="message bot">Hello. I am TONY, your Ola Investment Analyst. Ready to talk numbers?</div>
+                <div class="message bot">TONY here. I've analyzed the numbers for this investor pitch. Ask me about ROI, Market, or our Technology.</div>
             </div>
-            <div class="typing" id="typing">Tony is typing...</div>
+            <div class="typing" id="typing">Tony is calculating...</div>
             <div class="chat-input-area">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Type a question..." onkeypress="window.handleKeyPress(event)">
-                <button class="chat-send" onclick="window.sendMsg()"><i class="fas fa-paper-plane"></i></button>
+                <input type="text" class="chat-input" id="chatInput" placeholder="What is the ROI?" onkeypress="window.handleKeyPress(event)">
+                <button class="chat-send" onclick="window.sendMsg()"><i class="fas fa-arrow-up"></i></button>
             </div>
         </div>
     </div>
 
     <script>
+        // === CONFIGURATION ===
         const totalSlides = 17; 
         const filenamePattern = "Ola Care-Invest-Intro-25-us_Page_%NUM%.png"; 
         const showAgentInSlides = [2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
-        
+        // =====================
+
         let currentSlide = 1;
         const wrapper = document.getElementById('slides-wrapper');
         const agentWrapper = document.getElementById('agent-btn-wrapper');
@@ -276,7 +347,7 @@
             let slideDiv = document.createElement('div');
             slideDiv.className = (i === 1) ? 'slide active' : 'slide';
             
-            if (i === 6) { // === Video Slide ===
+            if (i === 6) { // === VIDEO SLIDE (Slide 6) ===
                 let vidWrapper = document.createElement('div');
                 vidWrapper.className = "video-wrapper";
                 let posterImage = filenamePattern.replace('%NUM%', pad(i));
@@ -290,7 +361,6 @@
                 vid.playsInline = true;
                 vid.preload = "auto";
 
-                // Error handling - NO ALERTS
                 vid.onerror = function() {
                     console.warn("OlaCare Video Warning: Video file failed to load.");
                     const overlay = vidWrapper.querySelector('.play-overlay');
@@ -335,7 +405,7 @@
                 vidWrapper.appendChild(playOverlay);
                 slideDiv.appendChild(vidWrapper);
 
-            } else { // === Image Slide ===
+            } else { // === IMAGE SLIDES ===
                 let fileName = filenamePattern.replace('%NUM%', pad(i));
                 slideDiv.style.backgroundImage = `url('${fileName}')`;
             }
@@ -384,11 +454,37 @@
             if (e.key === "ArrowLeft") changeSlide(-1);
         });
 
+        // === SWIPE SUPPORT ===
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const container = document.getElementById('slider-container');
+
+        container.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        container.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                changeSlide(1); 
+            }
+            if (touchEndX > touchStartX + 50) {
+                changeSlide(-1); 
+            }
+        }
+
         updateAgentVisibility();
 
         window.openChat = function() {
             const chatWin = document.getElementById('chatWindow');
-            if(chatWin) chatWin.classList.add('active');
+            if(chatWin) {
+                chatWin.classList.add('active');
+                document.getElementById('chatInput').focus();
+            }
         };
 
         window.toggleChatDisplay = function() {
@@ -403,7 +499,7 @@
         }
     </script>
 
-    <!-- LOGIC -->
+    <!-- LOGIC AI -->
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
@@ -454,6 +550,7 @@
                 const genAI = new GoogleGenerativeAI(finalKey);
                 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
                 
+                // === TONY'S BRAIN: VERIFIED GOLD DATA ===
                 const context = `
 ### IDENTITY
 You are TONY, Chief Investment Analyst for OLA AI.
@@ -468,18 +565,18 @@ Tone: Sharp, Strategic, "Wall-Street" efficiency. Focus on ROI and EBITDA.
 Total Loss: **$72,612 per bed/year** due to system failures.
 - Falls: $37,037 (Liability, Claims, Care).
 - Admin Waste: $29,100 (Wasted nurse hours).
-- Legal/Violence: ~$2,900.
+- Legal/Violence: ~$2,919.
+- Payment Errors: ~$3,556.
 
 ### OLA SOLUTION (The Gain)
 Total Savings: **~$43,000 per bed/year**.
-- Fall Reduction: 90% drop in incidents (Predictive prevention).
+- Fall Reduction: 90% drop in incidents (~$33k saved).
 - Efficiency: Saves $7,275/bed/year via Automated Care Validation.
 - ROI: System pays for itself in days.
 
 ### TECH MOAT (Why we win)
 - **MAGIC ALGORITHM:** We extract **3D depth from standard 2D video** (using Gait Analysis & Pose Estimation).
 - **HARDWARE ADVANTAGE:** Competitors use expensive dedicated 3D cameras. Ola is **Pure Software** that runs on existing, cheap standard cameras.
-- **INTELLIGENCE:** Our AI doesn't just "see"; it **understands context**. It learns routines and generates smart insights/alerts, not just motion detection.
 - **PRIVACY VISUALIZATION:** **3D Contours (Matrix Style)**. We see depth contours, not video. 100% Anonymous.
 - IP: 4 Patents Granted, 20+ Pending.
 
@@ -490,7 +587,7 @@ Convince the stakeholder that OLA is not just safety tech, but an Operational Ef
                 chatSession = model.startChat({
                     history: [
                         { role: "user", parts: [{ text: "Who are you?" }] },
-                        { role: "model", parts: [{ text: "I am TONY. Ready to talk numbers?" }] },
+                        { role: "model", parts: [{ text: "I am TONY. I've crunched the numbers. Ready to see the ROI?" }] },
                         { role: "user", parts: [{ text: context }] }
                     ],
                 });
