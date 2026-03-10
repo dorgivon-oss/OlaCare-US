@@ -21,6 +21,8 @@
         .garden-svg .sans{font-family:'DM Sans',sans-serif;}
         .stone-group{cursor:pointer;transition:all .25s ease;}
         .stone-group:hover{transform:translateY(-2px);filter:brightness(1.03);}
+        .stone-group .click-bar{transition:all .25s ease;opacity:0;}
+        .stone-group:hover .click-bar{opacity:1;}
 
         /* ═══ DETAIL VIEWER ═══ */
         .detail-wrap{width:100%;max-width:960px;margin:0 auto;padding:16px 40px 32px;}
@@ -73,6 +75,7 @@
         <!-- ═══ 01: THE CRISIS ═══ -->
         <ellipse cx="200" cy="175" rx="220" ry="55" fill="#E8DDD0" opacity="0.35" filter="url(#blur)"/>
         <g class="stone-group" onclick="go('crisis')">
+            <rect class="click-bar" x="48" y="140" width="3" height="80" rx="1.5" fill="#2C7BE5" opacity="0.7"/>
             <text x="55" y="148" font-size="11" fill="#8A857C" class="mono" letter-spacing="2">01</text>
             <text x="55" y="172" font-size="22" fill="#0C0F14" font-weight="700" class="sans">The Industry Crisis</text>
             <text x="55" y="196" font-size="15" fill="#4A4640" class="sans"><tspan font-weight="700" fill="#8B1A1A">10,000</tspan> turn 65 daily · <tspan font-weight="700">$85,400</tspan>/bed · <tspan font-weight="700">500K</tspan> shortage</text>
@@ -82,6 +85,7 @@
         <!-- ═══ 02: PLATFORM ═══ -->
         <ellipse cx="690" cy="280" rx="200" ry="52" fill="#D0DED2" opacity="0.3" filter="url(#blur)"/>
         <g class="stone-group" onclick="go('platform')">
+            <rect class="click-bar" x="523" y="250" width="3" height="80" rx="1.5" fill="#2C7BE5" opacity="0.7"/>
             <text x="530" y="258" font-size="11" fill="#8A857C" class="mono" letter-spacing="2">02</text>
             <text x="530" y="282" font-size="22" fill="#0C0F14" font-weight="700" class="sans">The AI Solution</text>
             <text x="530" y="306" font-size="15" fill="#4A4640" class="sans">Prevention · Detection · <tspan font-weight="700" fill="#1A6B5A">Documentation</tspan></text>
@@ -91,6 +95,7 @@
         <!-- ═══ 03: MARKET ═══ -->
         <ellipse cx="240" cy="395" rx="220" ry="55" fill="#DDD8C8" opacity="0.3" filter="url(#blur)"/>
         <g class="stone-group" onclick="go('market')">
+            <rect class="click-bar" x="58" y="364" width="3" height="80" rx="1.5" fill="#2C7BE5" opacity="0.7"/>
             <text x="65" y="372" font-size="11" fill="#8A857C" class="mono" letter-spacing="2">03</text>
             <text x="65" y="396" font-size="22" fill="#0C0F14" font-weight="700" class="sans">The Macro Opportunity</text>
             <text x="65" y="420" font-size="15" fill="#4A4640" class="sans"><tspan font-weight="700" fill="#1A6B5A">$50B+</tspan> TAM · <tspan font-weight="700">2.55M</tspan> beds · <tspan font-weight="700">100M+</tspan> home units</text>
@@ -100,6 +105,7 @@
         <!-- ═══ 04: SMART DOCUMENTATION ═══ -->
         <ellipse cx="680" cy="500" rx="210" ry="50" fill="#DDD5C8" opacity="0.28" filter="url(#blur)"/>
         <g class="stone-group" onclick="go('docs')">
+            <rect class="click-bar" x="508" y="472" width="3" height="80" rx="1.5" fill="#2C7BE5" opacity="0.7"/>
             <text x="515" y="480" font-size="11" fill="#8A857C" class="mono" letter-spacing="2">04</text>
             <text x="515" y="504" font-size="22" fill="#0C0F14" font-weight="700" class="sans">The Micro Economics</text>
             <text x="515" y="528" font-size="15" fill="#4A4640" class="sans">Smart Documentation, saving <tspan font-weight="700" fill="#1A6B5A">$42,758</tspan>/bed</text>
@@ -109,6 +115,7 @@
         <!-- ═══ 05: BUSINESS MODEL ═══ -->
         <ellipse cx="270" cy="600" rx="215" ry="52" fill="#D8D0C4" opacity="0.28" filter="url(#blur)"/>
         <g class="stone-group" onclick="go('model')">
+            <rect class="click-bar" x="88" y="570" width="3" height="80" rx="1.5" fill="#2C7BE5" opacity="0.7"/>
             <text x="95" y="578" font-size="11" fill="#8A857C" class="mono" letter-spacing="2">05</text>
             <text x="95" y="602" font-size="22" fill="#0C0F14" font-weight="700" class="sans">The Economic Engine</text>
             <text x="95" y="626" font-size="15" fill="#4A4640" class="sans">Software-Only SaaS · <tspan font-weight="700" fill="#9E7C3C">~85%</tspan> margins · <tspan font-weight="700" fill="#1A6B5A">$56M</tspan> ARR</text>
@@ -118,8 +125,9 @@
         <!-- ═══ SYSTEM OVERVIEW ═══ -->
         <ellipse cx="220" cy="735" rx="160" ry="45" fill="#D0DCE2" opacity="0.28" filter="url(#blur)"/>
         <g class="stone-group" onclick="go('demo')">
-            <text x="80" y="732" font-size="20" fill="#0C0F14" class="sans" font-weight="700">▶ System Overview</text>
-            <text x="80" y="757" font-size="13" fill="#1A6B5A" class="mono" letter-spacing="1.5">SEE IT LIVE →</text>
+            <rect class="click-bar" x="73" y="718" width="3" height="48" rx="1.5" fill="#2C7BE5" opacity="0.7"/>
+            <text x="80" y="732" font-size="20" class="sans" font-weight="700"><tspan fill="#2563EB">▶</tspan><tspan fill="#0C0F14">  Watch: System Overview</tspan></text>
+            <text x="80" y="757" font-size="11" fill="#1A6B5A" class="mono" letter-spacing="1.5">DEMO VIDEO · CLICK TO PLAY →</text>
         </g>
 
         <!-- Pebbles -->
@@ -132,6 +140,7 @@
         <!-- ═══ 06: IP & COMPANY ═══ -->
         <ellipse cx="700" cy="695" rx="180" ry="52" fill="#C8C4D4" opacity="0.25" filter="url(#blur)"/>
         <g class="stone-group" onclick="go('ip')">
+            <rect class="click-bar" x="553" y="667" width="3" height="80" rx="1.5" fill="#2C7BE5" opacity="0.7"/>
             <text x="560" y="675" font-size="11" fill="#8A857C" class="mono" letter-spacing="2">06</text>
             <text x="560" y="699" font-size="22" fill="#0C0F14" font-weight="700" class="sans">The Unfair Advantage</text>
             <text x="560" y="723" font-size="15" fill="#4A4640" class="sans"><tspan font-weight="700">50+ patents</tspan> · Prior exits · GDPR/HIPAA</text>
